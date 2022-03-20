@@ -1,10 +1,13 @@
+import os
+
 from brownie import FundMe, config, network, chain
 from scripts.helpers import get_account, deploy_mock, LOCAL_DEVELOPMENT_CHAINS
 
 
 def deploy():
     account = get_account()
-    print("Acount", account)
+    compaignDuration = os.environ.get("duration") or 5
+    fundRaiserAddress = os.environ.get("fundRaiserAddress")
 
     if network.show_active() not in LOCAL_DEVELOPMENT_CHAINS:
         print("Active network", network.show_active())
@@ -14,8 +17,8 @@ def deploy():
 
     fund_me = FundMe.deploy(
         price_feed,
-        6,
-        {"from": account},
+        compaignDuration,
+        {"from": fundRaiserAddress},
         publish_source=config["networks"][network.show_active()]["verify"],
     )
 
@@ -40,4 +43,4 @@ def withdraw():
 
 def main():
     deploy()
-    withdraw()
+    # withdraw()
