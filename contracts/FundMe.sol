@@ -71,6 +71,10 @@ contract FundMe {
   // onlyOwner modifer will first check the condition inside it
   // and if true, withdraw function will be executed
   function withdraw() public payable onlyOwner {
+    require(
+      now - fundRaiseCreationTime > lockPeriod * 60,
+      "You can't withdraw your funds yet !"
+    );
     msg.sender.transfer(address(this).balance);
 
     //iterate through all the mappings and make them 0
